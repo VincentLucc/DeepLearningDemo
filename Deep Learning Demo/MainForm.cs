@@ -21,7 +21,12 @@ namespace Deep_Learning_Demo
 
         private void InitEvents()
         {
-            
+            this.Shown += MainForm_Shown;
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+             
         }
 
         private void MainForm_Load(object sender, EventArgs e)

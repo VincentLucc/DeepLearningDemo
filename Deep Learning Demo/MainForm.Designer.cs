@@ -45,23 +45,23 @@ namespace Deep_Learning_Demo
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.imageCollection32 = new DevExpress.Utils.ImageCollection(this.components);
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
-            this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.propertyGridControl1 = new DevExpress.XtraVerticalGrid.PropertyGridControl();
-            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.hWindowControl1 = new HalconDotNet.HWindowControl();
+            this.propertyGridControl1 = new DevExpress.XtraVerticalGrid.PropertyGridControl();
+            this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlGroup2 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.layoutControlGroup2 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -111,8 +111,8 @@ namespace Deep_Learning_Demo
             // 
             this.barButtonItem1.Caption = "barButtonItem1";
             this.barButtonItem1.Id = 1;
-            this.barButtonItem1.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.cancel_16x16;
-            this.barButtonItem1.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.cancel_32x32;
+            this.barButtonItem1.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
+            this.barButtonItem1.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
             this.barButtonItem1.Name = "barButtonItem1";
             // 
             // MainMenuBar
@@ -190,6 +190,7 @@ namespace Deep_Learning_Demo
             this.imageCollection32.ImageStream = ((DevExpress.Utils.ImageCollectionStreamer)(resources.GetObject("imageCollection32.ImageStream")));
             this.imageCollection32.Images.SetKeyName(0, "apply_32x32.png");
             this.imageCollection32.Images.SetKeyName(1, "open2_32x32.png");
+            this.imageCollection32.Images.SetKeyName(2, "convert_32x32.png");
             // 
             // layoutControl1
             // 
@@ -203,16 +204,16 @@ namespace Deep_Learning_Demo
             this.layoutControl1.TabIndex = 4;
             this.layoutControl1.Text = "layoutControl1";
             // 
-            // Root
+            // hWindowControl1
             // 
-            this.Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
-            this.Root.GroupBordersVisible = false;
-            this.Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlGroup2,
-            this.layoutControlGroup1});
-            this.Root.Name = "Root";
-            this.Root.Size = new System.Drawing.Size(724, 327);
-            this.Root.TextVisible = false;
+            this.hWindowControl1.BackColor = System.Drawing.Color.Black;
+            this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
+            this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
+            this.hWindowControl1.Location = new System.Drawing.Point(237, 44);
+            this.hWindowControl1.Name = "hWindowControl1";
+            this.hWindowControl1.Size = new System.Drawing.Size(463, 259);
+            this.hWindowControl1.TabIndex = 5;
+            this.hWindowControl1.WindowSize = new System.Drawing.Size(463, 259);
             // 
             // propertyGridControl1
             // 
@@ -224,25 +225,25 @@ namespace Deep_Learning_Demo
             this.propertyGridControl1.Size = new System.Drawing.Size(185, 259);
             this.propertyGridControl1.TabIndex = 4;
             // 
-            // layoutControlItem1
+            // Root
             // 
-            this.layoutControlItem1.Control = this.propertyGridControl1;
-            this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(189, 263);
-            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem1.TextVisible = false;
+            this.Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            this.Root.GroupBordersVisible = false;
+            this.Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
+            this.layoutControlGroup2,
+            this.layoutControlGroup1});
+            this.Root.Name = "Root";
+            this.Root.Size = new System.Drawing.Size(724, 327);
+            this.Root.TextVisible = false;
             // 
-            // hWindowControl1
+            // layoutControlGroup2
             // 
-            this.hWindowControl1.BackColor = System.Drawing.Color.Black;
-            this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
-            this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hWindowControl1.Location = new System.Drawing.Point(237, 44);
-            this.hWindowControl1.Name = "hWindowControl1";
-            this.hWindowControl1.Size = new System.Drawing.Size(463, 259);
-            this.hWindowControl1.TabIndex = 5;
-            this.hWindowControl1.WindowSize = new System.Drawing.Size(463, 259);
+            this.layoutControlGroup2.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
+            this.layoutControlItem2});
+            this.layoutControlGroup2.Location = new System.Drawing.Point(213, 0);
+            this.layoutControlGroup2.Name = "layoutControlGroup2";
+            this.layoutControlGroup2.Size = new System.Drawing.Size(491, 307);
+            this.layoutControlGroup2.Text = "Window";
             // 
             // layoutControlItem2
             // 
@@ -262,14 +263,14 @@ namespace Deep_Learning_Demo
             this.layoutControlGroup1.Size = new System.Drawing.Size(213, 307);
             this.layoutControlGroup1.Text = "Parameters";
             // 
-            // layoutControlGroup2
+            // layoutControlItem1
             // 
-            this.layoutControlGroup2.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem2});
-            this.layoutControlGroup2.Location = new System.Drawing.Point(213, 0);
-            this.layoutControlGroup2.Name = "layoutControlGroup2";
-            this.layoutControlGroup2.Size = new System.Drawing.Size(491, 307);
-            this.layoutControlGroup2.Text = "Window";
+            this.layoutControlItem1.Control = this.propertyGridControl1;
+            this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem1.Name = "layoutControlItem1";
+            this.layoutControlItem1.Size = new System.Drawing.Size(189, 263);
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem1.TextVisible = false;
             // 
             // MainForm
             // 
@@ -288,12 +289,12 @@ namespace Deep_Learning_Demo
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
