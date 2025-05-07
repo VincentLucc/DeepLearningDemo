@@ -19,6 +19,7 @@ namespace Deep_Learning_Demo
         internal csHalconWindow HalconWindow = new csHalconWindow();
         public bool IsFormLoad;
         public csDevMessage MessageHelper;
+        
 
         public MainForm()
         {
@@ -44,6 +45,13 @@ namespace Deep_Learning_Demo
         {
             MessageHelper = new csDevMessage(this);
             InitLogging();
+
+            if (!csConfigHelper.LoadOrCreateConfig(out string sMessage))
+            {
+                if (!string.IsNullOrWhiteSpace(sMessage)) MessageHelper.Info(sMessage);
+                this.Close();
+                return;
+            }
 
             //Complete
             timer1.Start();

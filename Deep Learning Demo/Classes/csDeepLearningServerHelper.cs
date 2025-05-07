@@ -14,7 +14,6 @@ namespace Deep_Learning_Demo.Classes
     public class csDeepLearningServerHelper
     {
         static HttpClient httpClient = new HttpClient();
-        static string serverUrl = "http://10.1.2.202:8000";
         static csDeepLearningCloudParameters LocalParameters = new csDeepLearningCloudParameters();
 
         public static void InitServices(int iTimeout = 1000)
@@ -34,8 +33,14 @@ namespace Deep_Learning_Demo.Classes
                 var bData = GetImageBytes(image);
                 if (bData == null) return (false, "The input image is invalid.");
 
+                //Check server
+                if (string.IsNullOrEmpty(csConfigHelper.config.ServerUrl))
+                {
+                    return (false, "The server URL is not set.");
+                }
 
-                string sUrl = $"{serverUrl}//upload-image";
+
+                string sUrl = $"{csConfigHelper.config.ServerUrl}//upload-image";
 
                 //Create request
                 var content = new ByteArrayContent(bData);
