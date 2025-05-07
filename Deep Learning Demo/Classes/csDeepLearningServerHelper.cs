@@ -25,7 +25,7 @@ namespace Deep_Learning_Demo.Classes
             httpClient.DefaultRequestHeaders.Add("User-Agent", "CSharpHttpClient/1.0");
         }
 
-        public static async Task<(bool IsSuccess, string Message)> RequestInspection(HImage image, int iTimeout)
+        public static async Task<(bool IsSuccess, string Message)> RequestInspection(HImage image)
         {
             try
             {
@@ -39,8 +39,8 @@ namespace Deep_Learning_Demo.Classes
                     return (false, "The server URL is not set.");
                 }
 
-
-                string sUrl = $"{csConfigHelper.config.ServerUrl}//upload-image";
+                //Notice: must keep only one [/], [//] won't work
+                string sUrl = $"{csConfigHelper.config.ServerUrl}/upload-image";
 
                 //Create request
                 var content = new ByteArrayContent(bData);
@@ -53,6 +53,11 @@ namespace Deep_Learning_Demo.Classes
                 //Send request
                 HttpResponseMessage response = await httpClient.PostAsync(sUrl, content);
                 //response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return (false, $"Error {(int)response.StatusCode}\r\n{response.ReasonPhrase}");
+                }
 
                 //Pass all steps
                 return (true, $"Success");

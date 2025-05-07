@@ -53,6 +53,10 @@ namespace Deep_Learning_Demo
                 return;
             }
 
+
+            csDeepLearningServerHelper.InitServices(5000);
+
+
             //Complete
             timer1.Start();
             IsFormLoad = true;
@@ -145,7 +149,7 @@ namespace Deep_Learning_Demo
 
             var image = HalconWindow.View.GetViewImage();
 
-            var requestAction = await csDeepLearningServerHelper.RequestInspection(new HImage(image), 5000);
+            var requestAction = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
             if (!requestAction.IsSuccess)
             {
                 MessageHelper.Info(requestAction.Message);
