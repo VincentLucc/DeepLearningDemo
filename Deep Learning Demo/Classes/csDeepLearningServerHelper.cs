@@ -14,8 +14,17 @@ namespace Deep_Learning_Demo.Classes
     public class csDeepLearningServerHelper
     {
         static HttpClient httpClient = new HttpClient();
-        static string serverUrl = "Localhost:8000";
+        static string serverUrl = "http://10.1.2.202:8000";
         static csDeepLearningCloudParameters LocalParameters = new csDeepLearningCloudParameters();
+
+        public static void InitServices(int iTimeout = 1000)
+        {
+            //This value can only be set once
+            httpClient.Timeout = TimeSpan.FromMilliseconds(iTimeout);
+            //Prepare request
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "CSharpHttpClient/1.0");
+        }
 
         public static async Task<(bool IsSuccess, string Message)> RequestInspection(HImage image, int iTimeout)
         {
@@ -25,23 +34,20 @@ namespace Deep_Learning_Demo.Classes
                 var bData = GetImageBytes(image);
                 if (bData == null) return (false, "The input image is invalid.");
 
-                //Prepare request
-                httpClient.Timeout=TimeSpan.FromMilliseconds(iTimeout);
-                httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "CSharpHttpClient/1.0");
-                string sUrl = $"{serverUrl}/upload-image";
+
+                string sUrl = $"{serverUrl}//upload-image";
 
                 //Create request
                 var content = new ByteArrayContent(bData);
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
 
                 //Add request
-                string sValue = JsonConvert.SerializeObject(LocalParameters);
-                content.Headers.Add("Parameters", sValue);
+                //string sValue = JsonConvert.SerializeObject(LocalParameters);
+                //content.Headers.Add("Parameters", sValue);
 
                 //Send request
-                HttpResponseMessage response = await httpClient.PostAsync(serverUrl, content);
-                response.EnsureSuccessStatusCode();
+                HttpResponseMessage response = await httpClient.PostAsync(sUrl, content);
+                //response.EnsureSuccessStatusCode();
 
                 //Pass all steps
                 return (true, $"Success");
@@ -49,8 +55,8 @@ namespace Deep_Learning_Demo.Classes
             catch (Exception ex)
             {
 
-                Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Request.Exception {ex.Message}");
-                return (false, $"Exception,{ex.Message}");
+                Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Request.Exception {ex.GetMessageDetail()}");
+                return (false, $"Exception.\r\n {ex.Message}");
             }
 
         }

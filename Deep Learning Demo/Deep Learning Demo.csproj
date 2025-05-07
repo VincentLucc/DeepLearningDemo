@@ -212,6 +212,7 @@
   <ItemGroup>
     <Compile Include="Classes\csCommonExtension.cs" />
     <Compile Include="Classes\csDateTimeHelper.cs" />
+    <Compile Include="Classes\csDebugListener.cs" />
     <Compile Include="Classes\csDeepLearningServerHelper.cs" />
     <Compile Include="Classes\csDeepLearningSettings.cs" />
     <Compile Include="Classes\csDevMessage.cs" />
@@ -221,6 +222,8 @@
     <Compile Include="Classes\csHalconView.cs" />
     <Compile Include="Classes\csHalconWindow.cs" />
     <Compile Include="Classes\csHalconWindowModel.cs" />
+    <Compile Include="Classes\csLogging.cs" />
+    <Compile Include="Classes\csLogginModel.cs" />
     <Compile Include="Classes\csOpenCVWindow.cs" />
     <Compile Include="Classes\csPublic.cs" />
     <Compile Include="Forms\XtraFormEx.cs">

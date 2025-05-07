@@ -34,7 +34,7 @@ namespace Deep_Learning_Demo
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.OpenImageBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.RequestBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.ResetViewBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.MainMenuBar = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
@@ -81,7 +81,7 @@ namespace Deep_Learning_Demo
             this.barManager1.Images = this.imageCollection32;
             this.barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.OpenImageBarButtonItem,
-            this.barButtonItem1,
+            this.RequestBarButtonItem,
             this.ImageSizeBarButtonItem,
             this.barButtonItem3,
             this.ResetViewBarButtonItem});
@@ -98,7 +98,7 @@ namespace Deep_Learning_Demo
             this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.OpenImageBarButtonItem),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.RequestBarButtonItem),
             new DevExpress.XtraBars.LinkPersistInfo(this.ResetViewBarButtonItem, true)});
             this.bar1.OptionsBar.AllowQuickCustomization = false;
             this.bar1.OptionsBar.DrawBorder = false;
@@ -114,13 +114,14 @@ namespace Deep_Learning_Demo
             this.OpenImageBarButtonItem.Name = "OpenImageBarButtonItem";
             this.OpenImageBarButtonItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.OpenImageBarButtonItem_ItemClick);
             // 
-            // barButtonItem1
+            // RequestBarButtonItem
             // 
-            this.barButtonItem1.Caption = "barButtonItem1";
-            this.barButtonItem1.Id = 1;
-            this.barButtonItem1.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
-            this.barButtonItem1.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
-            this.barButtonItem1.Name = "barButtonItem1";
+            this.RequestBarButtonItem.Caption = "barButtonItem1";
+            this.RequestBarButtonItem.Id = 1;
+            this.RequestBarButtonItem.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
+            this.RequestBarButtonItem.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
+            this.RequestBarButtonItem.Name = "RequestBarButtonItem";
+            this.RequestBarButtonItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.RequestBarButtonItem_ItemClick);
             // 
             // ResetViewBarButtonItem
             // 
@@ -335,7 +336,7 @@ namespace Deep_Learning_Demo
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraBars.BarButtonItem OpenImageBarButtonItem;
         private DevExpress.Utils.ImageCollection imageCollection32;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem RequestBarButtonItem;
         private DevExpress.XtraBars.BarButtonItem ImageSizeBarButtonItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItem3;
         private DevExpress.XtraLayout.LayoutControl layoutControl1;

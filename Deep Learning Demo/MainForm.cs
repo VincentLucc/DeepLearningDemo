@@ -1,6 +1,7 @@
 ﻿using Deep_Learning_Demo.Classes;
 using Deep_Learning_Demo.Forms;
 using DevExpress.XtraEditors;
+using HalconDotNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,16 +37,28 @@ namespace Deep_Learning_Demo
         {
             //Init Halcon window
             HalconWindow.LinkWindow(hWindowControl1);
+            Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} App started");
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             MessageHelper = new csDevMessage(this);
-
+            InitLogging();
 
             //Complete
             timer1.Start();
             IsFormLoad = true;
+        }
+
+
+        private void InitLogging()
+        {
+            csPublic.DebugLogger = new csLogging(this);
+            csPublic.DebugLogger.LogFolder = Application.StartupPath + "\\Log";
+
+            //Init debug log
+            csDebugListener traceListener = new csDebugListener(csPublic.DebugLogger);
+            Debug.Listeners.Add(traceListener);
         }
 
         private void OpenImageBarButtonItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -87,7 +100,7 @@ namespace Deep_Learning_Demo
 
                 if (HalconWindow.View.IsViewImageValid)
                 {
-                    ImageSizeBarButtonItem.Caption= $"Image Size: {HalconWindow.LastImageSize.Width}x{HalconWindow.LastImageSize.Height}";
+                    ImageSizeBarButtonItem.Caption = $"Image Size: {HalconWindow.LastImageSize.Width}x{HalconWindow.LastImageSize.Height}";
                 }
                 else
                 {
@@ -111,6 +124,29 @@ namespace Deep_Learning_Demo
         private void ResetViewBarButtonItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             HalconWindow.ZoomOrigin();
+        }
+
+        private async void RequestBarButtonItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            //Verify the image
+            if (!HalconWindow.View.IsViewImageValid)
+            {//
+                MessageHelper.Info("Please load a valid image.");
+                return;
+            }
+
+            var image = HalconWindow.View.GetViewImage();
+
+            var requestAction = await csDeepLearningServerHelper.RequestInspection(new HImage(image), 5000);
+            if (!requestAction.IsSuccess)
+            {
+                MessageHelper.Info(requestAction.Message);
+                return;
+            }
+
+
+
+
         }
     }
 }
