@@ -16,7 +16,7 @@ using System.Xml.Serialization;
 using DevExpress.XtraEditors;
 using Newtonsoft.Json;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     /// <summary>
     /// Customized extension methods

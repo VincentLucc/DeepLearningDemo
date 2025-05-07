@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
  
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     public partial class csHalconHelper
     {

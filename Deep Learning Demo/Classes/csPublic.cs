@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenCV_Halcon_Demo.Classes
+namespace Deep_Learning_Demo.Classes
 {
     internal class csPublic
     {

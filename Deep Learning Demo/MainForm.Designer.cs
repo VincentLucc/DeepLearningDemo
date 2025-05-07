@@ -35,6 +35,7 @@ namespace Deep_Learning_Demo
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.OpenImageBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.ResetViewBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.MainMenuBar = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.ImageSizeBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
@@ -52,6 +53,7 @@ namespace Deep_Learning_Demo
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
@@ -81,10 +83,11 @@ namespace Deep_Learning_Demo
             this.OpenImageBarButtonItem,
             this.barButtonItem1,
             this.ImageSizeBarButtonItem,
-            this.barButtonItem3});
+            this.barButtonItem3,
+            this.ResetViewBarButtonItem});
             this.barManager1.LargeImages = this.imageCollection32;
             this.barManager1.MainMenu = this.MainMenuBar;
-            this.barManager1.MaxItemId = 4;
+            this.barManager1.MaxItemId = 5;
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar1
@@ -95,7 +98,11 @@ namespace Deep_Learning_Demo
             this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.OpenImageBarButtonItem),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.ResetViewBarButtonItem, true)});
+            this.bar1.OptionsBar.AllowQuickCustomization = false;
+            this.bar1.OptionsBar.DrawBorder = false;
+            this.bar1.OptionsBar.DrawDragBorder = false;
             this.bar1.Text = "Tools";
             // 
             // OpenImageBarButtonItem
@@ -114,6 +121,17 @@ namespace Deep_Learning_Demo
             this.barButtonItem1.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
             this.barButtonItem1.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
             this.barButtonItem1.Name = "barButtonItem1";
+            // 
+            // ResetViewBarButtonItem
+            // 
+            this.ResetViewBarButtonItem.Caption = "barButtonItem2";
+            this.ResetViewBarButtonItem.Id = 4;
+            this.ResetViewBarButtonItem.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.zoom100percent_32x32;
+            this.ResetViewBarButtonItem.ImageOptions.ImageIndex = 3;
+            this.ResetViewBarButtonItem.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.zoom100percent_32x32;
+            this.ResetViewBarButtonItem.ImageOptions.LargeImageIndex = 3;
+            this.ResetViewBarButtonItem.Name = "ResetViewBarButtonItem";
+            this.ResetViewBarButtonItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ResetViewBarButtonItem_ItemClick);
             // 
             // MainMenuBar
             // 
@@ -159,15 +177,15 @@ namespace Deep_Learning_Demo
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(724, 75);
+            this.barDockControlTop.Size = new System.Drawing.Size(898, 75);
             // 
             // barDockControlBottom
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 402);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 541);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(724, 29);
+            this.barDockControlBottom.Size = new System.Drawing.Size(898, 29);
             // 
             // barDockControlLeft
             // 
@@ -175,15 +193,15 @@ namespace Deep_Learning_Demo
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 75);
             this.barDockControlLeft.Manager = this.barManager1;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 327);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 466);
             // 
             // barDockControlRight
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(724, 75);
+            this.barDockControlRight.Location = new System.Drawing.Point(898, 75);
             this.barDockControlRight.Manager = this.barManager1;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 327);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 466);
             // 
             // imageCollection32
             // 
@@ -191,6 +209,7 @@ namespace Deep_Learning_Demo
             this.imageCollection32.Images.SetKeyName(0, "apply_32x32.png");
             this.imageCollection32.Images.SetKeyName(1, "open2_32x32.png");
             this.imageCollection32.Images.SetKeyName(2, "convert_32x32.png");
+            this.imageCollection32.Images.SetKeyName(3, "zoom100percent_32x32.png");
             // 
             // layoutControl1
             // 
@@ -200,7 +219,7 @@ namespace Deep_Learning_Demo
             this.layoutControl1.Location = new System.Drawing.Point(0, 75);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.Root;
-            this.layoutControl1.Size = new System.Drawing.Size(724, 327);
+            this.layoutControl1.Size = new System.Drawing.Size(898, 466);
             this.layoutControl1.TabIndex = 4;
             this.layoutControl1.Text = "layoutControl1";
             // 
@@ -209,11 +228,11 @@ namespace Deep_Learning_Demo
             this.hWindowControl1.BackColor = System.Drawing.Color.Black;
             this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
             this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
-            this.hWindowControl1.Location = new System.Drawing.Point(237, 44);
+            this.hWindowControl1.Location = new System.Drawing.Point(290, 44);
             this.hWindowControl1.Name = "hWindowControl1";
-            this.hWindowControl1.Size = new System.Drawing.Size(463, 259);
+            this.hWindowControl1.Size = new System.Drawing.Size(584, 398);
             this.hWindowControl1.TabIndex = 5;
-            this.hWindowControl1.WindowSize = new System.Drawing.Size(463, 259);
+            this.hWindowControl1.WindowSize = new System.Drawing.Size(584, 398);
             // 
             // propertyGridControl1
             // 
@@ -222,7 +241,7 @@ namespace Deep_Learning_Demo
             this.propertyGridControl1.MenuManager = this.barManager1;
             this.propertyGridControl1.Name = "propertyGridControl1";
             this.propertyGridControl1.OptionsView.AllowReadOnlyRowAppearance = DevExpress.Utils.DefaultBoolean.True;
-            this.propertyGridControl1.Size = new System.Drawing.Size(185, 259);
+            this.propertyGridControl1.Size = new System.Drawing.Size(238, 398);
             this.propertyGridControl1.TabIndex = 4;
             // 
             // Root
@@ -233,16 +252,16 @@ namespace Deep_Learning_Demo
             this.layoutControlGroup2,
             this.layoutControlGroup1});
             this.Root.Name = "Root";
-            this.Root.Size = new System.Drawing.Size(724, 327);
+            this.Root.Size = new System.Drawing.Size(898, 466);
             this.Root.TextVisible = false;
             // 
             // layoutControlGroup2
             // 
             this.layoutControlGroup2.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
             this.layoutControlItem2});
-            this.layoutControlGroup2.Location = new System.Drawing.Point(213, 0);
+            this.layoutControlGroup2.Location = new System.Drawing.Point(266, 0);
             this.layoutControlGroup2.Name = "layoutControlGroup2";
-            this.layoutControlGroup2.Size = new System.Drawing.Size(491, 307);
+            this.layoutControlGroup2.Size = new System.Drawing.Size(612, 446);
             this.layoutControlGroup2.Text = "Window";
             // 
             // layoutControlItem2
@@ -250,7 +269,7 @@ namespace Deep_Learning_Demo
             this.layoutControlItem2.Control = this.hWindowControl1;
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(467, 263);
+            this.layoutControlItem2.Size = new System.Drawing.Size(588, 402);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
@@ -260,7 +279,7 @@ namespace Deep_Learning_Demo
             this.layoutControlItem1});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(213, 307);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(266, 446);
             this.layoutControlGroup1.Text = "Parameters";
             // 
             // layoutControlItem1
@@ -268,15 +287,19 @@ namespace Deep_Learning_Demo
             this.layoutControlItem1.Control = this.propertyGridControl1;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(189, 263);
+            this.layoutControlItem1.Size = new System.Drawing.Size(242, 402);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(724, 431);
+            this.ClientSize = new System.Drawing.Size(898, 570);
             this.Controls.Add(this.layoutControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
@@ -323,6 +346,8 @@ namespace Deep_Learning_Demo
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup2;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
+        private System.Windows.Forms.Timer timer1;
+        private DevExpress.XtraBars.BarButtonItem ResetViewBarButtonItem;
     }
 }
 

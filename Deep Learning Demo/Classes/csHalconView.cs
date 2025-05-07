@@ -12,7 +12,7 @@ using DevExpress.XtraBars.Docking2010.Views;
 using HalconDotNet;
 using Newtonsoft.Json;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     [Serializable]
     public class HalconView

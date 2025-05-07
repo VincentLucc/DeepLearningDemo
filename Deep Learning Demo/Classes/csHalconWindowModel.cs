@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using DevExpress.XtraExport.Helpers;
 using DevExpress.Charts.Native;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
 
     public class csViewPortLayout

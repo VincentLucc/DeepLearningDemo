@@ -1,7 +1,6 @@
 ﻿using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Camera;
 using DevExpress.XtraSplashScreen;
-using OpenCV_Halcon_Demo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     /// <summary>
     /// Handle devExpress message box 

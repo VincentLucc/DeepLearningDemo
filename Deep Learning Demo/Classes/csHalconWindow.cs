@@ -16,7 +16,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     public class csHalconWindow
     {

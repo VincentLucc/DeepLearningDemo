@@ -9,7 +9,7 @@ using Microsoft.Win32;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 
-namespace OpenCV_Halcon_Demo.Classes
+namespace Deep_Learning_Demo.Classes
 {
     internal class csOpenCVWindow
     {

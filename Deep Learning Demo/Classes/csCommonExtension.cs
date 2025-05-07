@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OpenCV_Halcon_Demo
+namespace Deep_Learning_Demo
 {
     public static class csCommonExtension
     {
