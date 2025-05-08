@@ -9,29 +9,27 @@ namespace Deep_Learning_Demo.Classes
 
 
 
-    public class csDeepLearningRequest
+    public class csDeepLearningAPIRequest
     {
-        public long CommandID;
+        public string CommandID { get; set; } = csDateTimeHelper.DateTime_fff;
+
         /// <summary>
         /// Timeout in ms
         /// </summary>
-        public int Timeout;
+        public int Timeout { get; set; } = 5000;
+
+        public List<csModelSettings> Models { get; set; } = new List<csModelSettings>();
+
+        
     }
 
-    public class csDeepLearningCloudParameters: csDeepLearningRequest
+ 
+
+    public class csModelSettings
     {
-        public int ImageWidth { get; set; }
-        public int ImageHeight { get; set; }
+        public int ModelIndex { get; set; } = 1;
 
-        public List<csDeepLearningSettings> ModelSettings { get; set; } = new List<csDeepLearningSettings>();
-
-    }
-
-    public class csDeepLearningSettings
-    {
-        public int ModelIndex { get; set; }
-
-        public int Threadhold { get; set; }
+        public int Threadhold { get; set; } = 20;
 
     }
 }

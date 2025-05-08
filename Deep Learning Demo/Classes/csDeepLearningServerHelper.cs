@@ -18,7 +18,6 @@ namespace Deep_Learning_Demo.Classes
     public class csDeepLearningServerHelper
     {
         static HttpClient httpClient = new HttpClient();
-        static csDeepLearningCloudParameters LocalParameters = new csDeepLearningCloudParameters();
 
         public static void InitServices(int iTimeout = 1000)
         {
@@ -45,6 +44,10 @@ namespace Deep_Learning_Demo.Classes
 
                 //Notice: must keep only one [/], [//] won't work
                 string sUrl = $"{csConfigHelper.config.ServerUrl}/upload-image";
+                //Debug
+                sUrl = "http://127.0.0.1:8000/function1";
+
+              
 
                 //Create request
                 var content = new ByteArrayContent(bData);
@@ -52,6 +55,8 @@ namespace Deep_Learning_Demo.Classes
                 //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                 //Must set to image
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/tiff");
+                //Debug info
+                content.Headers.Add("parameters", GetAPIRequestParameterString());
 
                 //Send request
                 HttpResponseMessage response = await httpClient.PostAsync(sUrl, content);
@@ -94,6 +99,16 @@ namespace Deep_Learning_Demo.Classes
                 return (false, $"Exception.\r\n {ex.Message}", null);
             }
 
+        }
+
+
+        public static string GetAPIRequestParameterString()
+        {
+            var apiRequest = new csDeepLearningAPIRequest();
+            apiRequest.Models = csConfigHelper.config.Models;
+
+            string sData= JsonConvert.SerializeObject(apiRequest);
+            return sData;
         }
 
         /// <summary>

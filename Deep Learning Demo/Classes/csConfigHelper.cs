@@ -121,6 +121,7 @@ public class csConfigHelper
         else
         {//File not exist, create a new and save
             config = new csConfigModel();
+            config.InitData();
             return SaveToDefault(out sMessage);
         }
     }
