@@ -19,7 +19,7 @@ namespace Deep_Learning_Demo
         internal csHalconWindow HalconWindow = new csHalconWindow();
         public bool IsFormLoad;
         public csDevMessage MessageHelper;
-        
+
 
         public MainForm()
         {
@@ -149,11 +149,19 @@ namespace Deep_Learning_Demo
 
             var image = HalconWindow.View.GetViewImage();
 
+            
             var requestAction = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
             if (!requestAction.IsSuccess)
             {
                 MessageHelper.Info(requestAction.Message);
                 return;
+            }
+
+            //Check result
+            if (requestAction.responseImage != null)
+            {
+                //Show image
+                HalconWindow.DisplayImage(requestAction.responseImage);
             }
 
 

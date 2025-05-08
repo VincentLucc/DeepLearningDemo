@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +15,52 @@ namespace Deep_Learning_Demo
 {
     public static class csCommonExtension
     {
+
+        public static void ShowResponseInfo(this HttpResponseMessage response)
+        {
+            int iIndex = 1;
+            foreach (var header in response.Headers)
+            {
+                Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Header({iIndex}):[{header.Key}, {string.Join(", ", header.Value)}]");
+                iIndex++;
+            }
+
+            iIndex = 1;
+            foreach (var header in response.Content.Headers)
+            {
+                Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Content({iIndex}):[{header.Key}, {string.Join(", ", header.Value)}]");
+                iIndex++;
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns>"application/json"</returns>
+        public static string GetResponseContentType(this HttpResponseMessage response)
+        {
+            //Get the response type
+            
+            var contentType = response.Content.Headers.
+                FirstOrDefault(a => a.Key == "Content-Type");
+            if (contentType.Key == null || contentType.Value == null)
+            {
+                return null;
+            }
+
+            if (contentType.Key != null && contentType.Value != null)
+            {
+                string sType1 = contentType.Value.FirstOrDefault();
+                return sType1;
+            }
+
+            //No matches
+            return null;
+
+        }
+
         public static void SetIntialFolder(this XtraFolderBrowserDialog dialog, string sCurrentFolder, string sDefaultFolder)
         {
             if (string.IsNullOrWhiteSpace(sCurrentFolder))
@@ -41,7 +88,7 @@ namespace Deep_Learning_Demo
         }
 
 
-     
+
 
         /// <summary>
         /// Avoid un-needed update
