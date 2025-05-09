@@ -140,32 +140,49 @@ namespace Deep_Learning_Demo
 
         private async void RequestBarButtonItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            //Verify the image
-            if (!HalconWindow.View.IsViewImageValid)
-            {//
-                MessageHelper.Info("Please load a valid image.");
-                return;
-            }
-
-            var image = HalconWindow.View.GetViewImage();
-
-            
-            var requestAction = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
-            if (!requestAction.IsSuccess)
+            try
             {
-                MessageHelper.Info(requestAction.Message);
-                return;
-            }
+                this.Enabled = false;
 
-            //Check result
-            if (requestAction.responseImage != null)
+                //Verify the image
+                if (!HalconWindow.View.IsViewImageValid)
+                {//
+                    MessageHelper.Info("Please load a valid image.");
+                    return;
+                }
+
+                MessageHelper.ShowMainLoading();
+                var image = HalconWindow.View.GetViewImage();
+
+
+                var apiResponse = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
+                ProcessTimeBarButtonItem.Caption = $"Last Request: {apiResponse.GetDuration().ToString("f1")}ms";
+                if (!apiResponse.IsSuccess)
+                {
+                    MessageHelper.Info(apiResponse.Message);
+                    return;
+                }
+
+                //Check result
+                if (apiResponse.ResponseImage != null)
+                {
+                    //Show image
+                    HalconWindow.DisplayImage(apiResponse.ResponseImage);
+                    apiResponse.Dispose();
+                }
+
+                //Success
+                MessageHelper.Info(apiResponse.Message);
+            }
+            catch (Exception ex)
             {
-                //Show image
-                HalconWindow.DisplayImage(requestAction.responseImage);
+                Trace.WriteLine($"RequestBarButtonItem_ItemClick.exception:{ex.GetMessageDetail()}");
             }
-
-
-
+            finally
+            {
+                MessageHelper.CloseLoadingForm();
+                this.Enabled = true;
+            }
 
         }
     }

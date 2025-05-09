@@ -39,7 +39,7 @@ namespace Deep_Learning_Demo
             this.MainMenuBar = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
             this.ImageSizeBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
+            this.ProcessTimeBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -83,7 +83,7 @@ namespace Deep_Learning_Demo
             this.OpenImageBarButtonItem,
             this.RequestBarButtonItem,
             this.ImageSizeBarButtonItem,
-            this.barButtonItem3,
+            this.ProcessTimeBarButtonItem,
             this.ResetViewBarButtonItem});
             this.barManager1.LargeImages = this.imageCollection32;
             this.barManager1.MainMenu = this.MainMenuBar;
@@ -154,7 +154,7 @@ namespace Deep_Learning_Demo
             this.bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
             this.bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.ImageSizeBarButtonItem),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem3)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.ProcessTimeBarButtonItem)});
             this.bar3.OptionsBar.AllowQuickCustomization = false;
             this.bar3.OptionsBar.DrawDragBorder = false;
             this.bar3.OptionsBar.UseWholeRow = true;
@@ -166,11 +166,11 @@ namespace Deep_Learning_Demo
             this.ImageSizeBarButtonItem.Id = 2;
             this.ImageSizeBarButtonItem.Name = "ImageSizeBarButtonItem";
             // 
-            // barButtonItem3
+            // ProcessTimeBarButtonItem
             // 
-            this.barButtonItem3.Caption = "barButtonItem3";
-            this.barButtonItem3.Id = 3;
-            this.barButtonItem3.Name = "barButtonItem3";
+            this.ProcessTimeBarButtonItem.Caption = "Last Request: N/A";
+            this.ProcessTimeBarButtonItem.Id = 3;
+            this.ProcessTimeBarButtonItem.Name = "ProcessTimeBarButtonItem";
             // 
             // barDockControlTop
             // 
@@ -338,7 +338,7 @@ namespace Deep_Learning_Demo
         private DevExpress.Utils.ImageCollection imageCollection32;
         private DevExpress.XtraBars.BarButtonItem RequestBarButtonItem;
         private DevExpress.XtraBars.BarButtonItem ImageSizeBarButtonItem;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem3;
+        private DevExpress.XtraBars.BarButtonItem ProcessTimeBarButtonItem;
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup Root;
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControl1;

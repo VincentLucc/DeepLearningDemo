@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using DevExpress.DataAccess.Native.Web;
 
 namespace Deep_Learning_Demo.Classes
 {
@@ -28,27 +29,32 @@ namespace Deep_Learning_Demo.Classes
             httpClient.DefaultRequestHeaders.Add("User-Agent", "CSharpHttpClient/1.0");
         }
 
-        public static async Task<(bool IsSuccess, string Message, HObject responseImage)> RequestInspection(HImage image)
+        public static async Task<csDeepLearningAPIResponse> RequestInspection(HImage image)
         {
+            var result = new csDeepLearningAPIResponse();
             try
             {
+                
                 Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} RequestInspection.Enter");
                 var bData = GetImageTiffByte(image);
-                if (bData == null) return (false, "The input image is invalid.", null);
-
+                if (bData == null)
+                {
+                    result.Message = "The input image is invalid.";
+                    return result;
+                }
+    
                 //Check server
                 if (string.IsNullOrEmpty(csConfigHelper.config.ServerUrl))
                 {
-                    return (false, "The server URL is not set.", null);
+                    result.Message = "The server URL is not set.";
+                    return result;
                 }
 
                 //Notice: must keep only one [/], [//] won't work
                 string sUrl = $"{csConfigHelper.config.ServerUrl}/upload-image";
                 //Debug
                 sUrl = "http://127.0.0.1:8000/function1";
-
-              
-
+ 
                 //Create request
                 var content = new ByteArrayContent(bData);
                 //When use raw image data
@@ -57,23 +63,41 @@ namespace Deep_Learning_Demo.Classes
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/tiff");
                 //Debug info
                 content.Headers.Add("parameters", GetAPIRequestParameterString());
+                //content.Headers.Add("parameters", "GetAPIRequestParameterString()");
 
                 //Send request
                 HttpResponseMessage response = await httpClient.PostAsync(sUrl, content);
-                //response.EnsureSuccessStatusCode();
+                response.ShowResponseInfo();
+                string sContentType = response.GetResponseContentType();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return (false, $"Error {(int)response.StatusCode}\r\n{response.ReasonPhrase}", null);
+                    if (sContentType.Contains("text/plain"))
+                    {
+                        string sContent = await response.Content.ReadAsStringAsync();
+                        Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Response Text:\r\n{sContent}");
+                        result.Message = $"Error {(int)response.StatusCode}\r\n{sContent}";
+                        return result;
+                    }
+                    else
+                    {
+                        result.Message = $"Error {(int)response.StatusCode}\r\n{response.ReasonPhrase}";
+                        return result;
+                    }
+               
                 }
-
-                response.ShowResponseInfo();
+               
                 HObject responseImage = null;
-                string sContentType = response.GetResponseContentType();
+             
                 if (sContentType == "application/json")
                 {
                     string sContent = await response.Content.ReadAsStringAsync();
                     Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Response Json:\r\n{sContent}");
+                }
+                else if (sContentType.Contains("text/plain"))
+                {
+                    string sContent = await response.Content.ReadAsStringAsync();
+                    Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Response Text:\r\n{sContent}");
                 }
                 else if (sContentType == "image/png")
                 {//Convert png to the Halcon image
@@ -86,17 +110,20 @@ namespace Deep_Learning_Demo.Classes
                     responseImage.SaveImage(sFilePath);
                 }
 
-                Path.GetTempFileName();
 
                 //Pass all steps
                 Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} RequestInspection.Success");
-                return (true, $"Success", responseImage);
+                result.ResponseImage = responseImage;
+                result.Message = $"Success.";
+                result.IsSuccess = true;
+                return result;
             }
             catch (Exception ex)
             {
 
                 Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} Request.Exception: {ex.GetMessageDetail()}");
-                return (false, $"Exception.\r\n {ex.Message}", null);
+                result.Message = $"Exception.\r\n {ex.Message}";
+                return result;
             }
 
         }
