@@ -53,8 +53,8 @@ namespace Deep_Learning_Demo
                 return;
             }
 
-
-            csDeepLearningServerHelper.InitServices(5000);
+            int iTimeout = csConfigHelper.config.RequestTimeOut;
+            csDeepLearningServerHelper.InitServices(iTimeout);
 
 
             //Complete
@@ -163,16 +163,15 @@ namespace Deep_Learning_Demo
                     return;
                 }
 
-                //Check result
+                //Show image
                 if (apiResponse.ResponseImage != null)
                 {
-                    //Show image
                     HalconWindow.DisplayImage(apiResponse.ResponseImage);
-                    apiResponse.Dispose();
                 }
 
                 //Success
                 MessageHelper.Info(apiResponse.Message);
+                apiResponse.Dispose();
             }
             catch (Exception ex)
             {
