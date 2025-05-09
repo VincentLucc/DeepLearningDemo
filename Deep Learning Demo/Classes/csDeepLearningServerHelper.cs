@@ -52,9 +52,7 @@ namespace Deep_Learning_Demo.Classes
 
                 //Notice: must keep only one [/], [//] won't work
                 string sUrl = $"{csConfigHelper.config.ServerUrl}/upload-image";
-                //Debug
-                sUrl = "http://127.0.0.1:8000/function1";
- 
+
                 //Create request
                 var content = new ByteArrayContent(bData);
                 //When use raw image data
