@@ -12,32 +12,12 @@ namespace Deep_Learning_Demo.Classes
     {
         public string ServerUrl { get; set; } = "http://10.1.2.202:8000";
 
-        public int RequestTimeOut { get; set; } = 5000;
-
-        public List<csModelSettings> Models { get; set; } = new List<csModelSettings>();
+        public csDeepLearningAPISettings APISettings { get; set; } = new csDeepLearningAPISettings();
 
         public csConfigModel()
         {
 
         }
-
-        public void InitData()
-        {
-            Models.Add(new csModelSettings()
-            {
-                ModelIndex = 1,
-                Threadhold = 20,
-            });
-            Models.Add(new csModelSettings()
-            {
-                ModelIndex = 2,
-                Threadhold = 20,
-            });
-            Models.Add(new csModelSettings()
-            {
-                ModelIndex = 3,
-                Threadhold = 20,
-            });
-        }
+ 
     }
 }

@@ -129,9 +129,7 @@ namespace Deep_Learning_Demo.Classes
 
         public static string GetAPIRequestParameterString()
         {
-            var apiRequest = new csDeepLearningAPIRequest();
-            apiRequest.Models = csConfigHelper.config.Models;
-
+            var apiRequest = new csDeepLearningAPIRequest(csConfigHelper.config.APISettings);
             string sData= JsonConvert.SerializeObject(apiRequest);
             return sData;
         }

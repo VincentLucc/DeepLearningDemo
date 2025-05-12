@@ -53,7 +53,7 @@ namespace Deep_Learning_Demo
                 return;
             }
 
-            int iTimeout = csConfigHelper.config.RequestTimeOut;
+            int iTimeout = csConfigHelper.config.APISettings.Timeout;
             csDeepLearningServerHelper.InitServices(iTimeout);
 
 

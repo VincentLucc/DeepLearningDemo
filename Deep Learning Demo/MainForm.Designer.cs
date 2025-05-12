@@ -307,7 +307,7 @@ namespace Deep_Learning_Demo
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "MainForm";
-            this.Text = "Deep Learning Demo";
+            this.Text = "Deep Learning API Client Demo";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).EndInit();
