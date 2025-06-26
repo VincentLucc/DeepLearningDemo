@@ -44,6 +44,108 @@ namespace Deep_Learning_Demo
             return list;
         }
 
+        /// <summary>
+        /// Get the image data without format
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public static byte[] HobjectToRawByte(this HObject image)
+        {
+            try
+            {
+                HOperatorSet.CountChannels(image, out HTuple channels);
+                if (channels.L == 1)
+                {
+                    HOperatorSet.GetImagePointer1(image, out HTuple pointer, out HTuple type, out HTuple width, out HTuple height);
+                    long lSize = width.L * height.L;
+                    byte[] array = new byte[width.L * height.L];
+                    //Get old image address
+                    unsafe
+                    {
+                        byte* imagePointer = ((byte*)pointer.L);
+                        fixed (byte* arrayPointer = array)
+                        {
+                            Buffer.MemoryCopy(imagePointer, arrayPointer, lSize, lSize);
+                        }
+                    }
+
+                    return array;
+
+                }
+                else if (channels.L == 3)
+                {
+                    //Get data pointer
+                    HOperatorSet.GetImagePointer3(image, out HTuple pointerRed, out HTuple pointerGreen, out HTuple pointerBlue, out HTuple type, out HTuple width, out HTuple height);
+                    long lSizeSingle = width.L * height.L;
+                    long lSizeTotal = lSizeSingle * 3;
+                    byte[] dataArray = new byte[lSizeTotal];
+
+                    unsafe
+                    {
+                        //Get old image address
+                        byte* r = ((byte*)pointerRed.L);
+                        byte* g = ((byte*)pointerGreen.L);
+                        byte* b = ((byte*)pointerBlue.L);
+
+
+                        fixed (byte* arrayPointer = dataArray)
+                        {
+                            byte* pStartRed = arrayPointer;
+                            byte* pStartGreen = arrayPointer + width.L * height.L;
+                            byte* pStartBlue = arrayPointer + width.L * height.L * 2;
+                            Parallel.Invoke(
+                             () =>
+                             { //R
+                                 Buffer.MemoryCopy(r, pStartRed, lSizeSingle, lSizeSingle);
+                             },
+                             () =>
+                             {//g
+                                 Buffer.MemoryCopy(g, pStartGreen, lSizeSingle, lSizeSingle);
+                             },
+                             () =>
+                             { //b
+                                 Buffer.MemoryCopy(b, pStartBlue, lSizeSingle, lSizeSingle);
+                             }
+                         );
+                        }
+                    }
+
+                    return dataArray;
+                }
+                else
+                {
+                    "Undefined Image type".TraceRecord();
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ex.TraceException("HobjectToRawByte");
+                return null;
+            }
+        }
+
+
+        public static HObject MonoBytesToHObject(this byte[] byteData, int iWdith, int iHeight)
+        {
+            try
+            {
+                unsafe
+                {
+                    fixed (byte* bytePointer = byteData)
+                    {
+                        HOperatorSet.GenImage1(out HObject imageNew, "byte", iWdith, iHeight, (IntPtr)bytePointer);
+                        return imageNew;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.TraceException("MonoBytesToHObject");
+                return null;
+            }
+        }
 
 
         public static (bool IsSuccess, string Message) SaveImage(this HObject image, string sPath)

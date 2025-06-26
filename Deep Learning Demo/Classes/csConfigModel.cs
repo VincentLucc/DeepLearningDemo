@@ -12,16 +12,27 @@ namespace Deep_Learning_Demo.Classes
     public class csConfigModel
     {
         public _workMode WorkMode { get; set; } = _workMode.API;
-        public string ServerUrl
-        { get; set; } = "http://10.1.2.202:8000";
 
+        public string PythonHome { get; set; } = "C:\\Program Files\\Python312";
 
+        public List<string> PythonModuleFolders { get; set; } = new List<string>();
+        public string ServerUrl { get; set; } = "http://10.1.2.202:8000";
 
         public csDeepLearningAPISettings APISettings { get; set; } = new csDeepLearningAPISettings();
 
         public csConfigModel()
         {
 
+        }
+
+
+        public void CreateSampleData()
+        {
+            APISettings.InitData();
+
+            //Create Sample module paths
+            PythonModuleFolders.Add(@"C:\PythonModules\Module1");
+            PythonModuleFolders.Add(@"C:\PythonModules\Module2");
         }
 
     }

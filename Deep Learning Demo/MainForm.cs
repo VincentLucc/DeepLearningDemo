@@ -10,7 +10,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Python.Runtime;
 
 namespace Deep_Learning_Demo
 {
@@ -69,18 +71,20 @@ namespace Deep_Learning_Demo
             workModeLookUpEdit.DataSource = workModeOptions;
             workModeLookUpEdit.DropDownRows = workModeOptions.Length;
             workModeLookUpEdit.ShowFooter = false;
-            workModeLookUpEdit.EditValueChanged += WorkModeLookUpEdit_EditValueChanged;
             WorkModeBarEditItem.EditValue = csConfigHelper.config.WorkMode;
+            WorkModeBarEditItem.EditValueChanged += WorkModeBarEditItem_EditValueChanged;
         }
 
-        private void WorkModeLookUpEdit_EditValueChanged(object sender, EventArgs e)
+        private void WorkModeBarEditItem_EditValueChanged(object sender, EventArgs e)
         {
             if (!IsFormLoad) return;
             if (WorkModeBarEditItem.EditValue is _workMode workMode)
             {
                 csConfigHelper.config.WorkMode = workMode;
+                $"WorkModeChanged:{csConfigHelper.config.WorkMode}".TraceRecord();
             }
         }
+
 
         private void InitLogging()
         {
@@ -173,24 +177,17 @@ namespace Deep_Learning_Demo
                 MessageHelper.ShowMainLoading();
                 var image = HalconWindow.View.GetViewImage();
 
-
-                var apiResponse = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
-                ProcessTimeBarButtonItem.Caption = $"Last Request: {apiResponse.GetDuration().ToString("f1")}ms";
-                if (!apiResponse.IsSuccess)
+                switch (csConfigHelper.config.WorkMode)
                 {
-                    MessageHelper.Info(apiResponse.Message);
-                    return;
+                    case _workMode.API:
+                        await ProcessAPIRequest(image);
+                        break;
+                    case _workMode.PyhtonScript:
+                        ProcessLocalPythonScript(image);
+                        break;
+                    default:
+                        break;
                 }
-
-                //Show image
-                if (apiResponse.ResponseImage != null)
-                {
-                    HalconWindow.DisplayImage(apiResponse.ResponseImage);
-                }
-
-                //Success
-                MessageHelper.Info(apiResponse.Message);
-                apiResponse.Dispose();
             }
             catch (Exception ex)
             {
@@ -202,6 +199,147 @@ namespace Deep_Learning_Demo
                 this.Enabled = true;
             }
 
+        }
+
+
+
+        private async Task ProcessAPIRequest(HObject image)
+        {
+            var apiResponse = await csDeepLearningServerHelper.RequestInspection(new HImage(image));
+            ProcessTimeBarButtonItem.Caption = $"Last Request: {apiResponse.GetDuration().ToString("f1")}ms";
+            if (!apiResponse.IsSuccess)
+            {
+                MessageHelper.Info(apiResponse.Message);
+                return;
+            }
+
+            //Show image
+            if (apiResponse.ResponseImage != null)
+            {
+                HalconWindow.DisplayImage(apiResponse.ResponseImage);
+            }
+
+            //Success
+            MessageHelper.Info(apiResponse.Message);
+            apiResponse.Dispose();
+        }
+
+        private void ProcessLocalPythonScript(HObject image)
+        {
+            //Ignore the init time
+            string sMessage = String.Empty;
+            if (!csConfigHelper.IsPythonEngineInit)
+            {//Make sure only init once
+                if (!InitPythonEngine(out sMessage))
+                {
+                    MessageHelper.Error(sMessage);
+                    return;
+                }
+            }
+
+            //Start the operation
+            "ProcessLocalPythonScript.Enter".TraceRecord();
+            Stopwatch watch = Stopwatch.StartNew();
+            var rawImage = image.HobjectToRawByte();
+            HOperatorSet.GetImageSize(image, out HTuple width, out HTuple height);
+            "ProcessLocalPythonScript.RawBytesReady".TraceRecord();
+
+            using (Py.GIL())
+            {
+                try
+                {
+                    dynamic sys = Py.Import("sys");
+                    $"Python version: {sys.version}".TraceRecord();
+
+                    //Apply module folders
+                    foreach (var folder in csConfigHelper.config.PythonModuleFolders)
+                    {
+                        sys.path.append(folder);
+                        $"Python module folder: {folder}".TraceRecord();
+                    }
+
+                    //Get module entry
+                    dynamic runnerModule = Py.Import("model_runner");
+                    //Create instance
+                    dynamic myRunner = runnerModule.ModelRunner();
+
+                    //Perform inference
+                    dynamic inferResult = myRunner.infer_image(rawImage);
+
+                    //Check result
+                    byte[] resultBytes = null;
+                    if (inferResult is byte[])
+                    {
+                        resultBytes = (byte[])inferResult;
+                    }
+                    else if (inferResult is PyObject pyObj)
+                    {
+                        resultBytes = (byte[])pyObj.AsManagedObject(typeof(byte[]));
+                    }
+                    else
+                    {
+                        MessageHelper.Error("Unexpected result");
+                        return;
+                    }
+
+                    //Assuming the result is an image, convert it back to HObject
+                    var responseImage = resultBytes.MonoBytesToHObject((int)width.D, (int)height.D);
+                    watch.Stop();
+                    ProcessTimeBarButtonItem.Caption = $"Last Request: {watch.ElapsedMilliseconds.ToString("f1")}ms";
+
+                    //Show the result
+                    HalconWindow.DisplayImage(responseImage);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine($"ProcessLocalPythonScript.Exception:{ex.GetMessageDetail()}");
+                    MessageHelper.Error(ex.Message);
+                }
+                finally
+                {
+                    //Don't call this, leave engine running!!!
+                    //PythonEngine.Shutdown();
+                    "ProcessLocalPythonScript.Complete".TraceRecord();
+                }
+            }
+        }
+
+        private bool InitPythonEngine(out string sMessage)
+        {
+            sMessage = String.Empty;
+            csConfigHelper.IsPythonEngineInit = false;
+
+            try
+            {
+                "InitPythonEngine.Start".TraceRecord();
+                //Prepare
+                string sPythonHome = csConfigHelper.config.PythonHome;
+                //Must set dll
+                Runtime.PythonDLL = $"{sPythonHome}\\python312.dll";
+                PythonEngine.PythonHome = sPythonHome;
+                //python path (Any call like [PythonEngine.PythonHome] must run after [Initialize])
+                StringBuilder pathBuilder = new StringBuilder();
+                pathBuilder.Append($"{sPythonHome}\\Lib");
+                pathBuilder.Append($";{sPythonHome}\\Lib\\site-packages");
+                PythonEngine.PythonPath = pathBuilder.ToString();
+
+                //Start init
+                PythonEngine.Initialize();
+
+                //Complete
+                csConfigHelper.IsPythonEngineInit = true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ex.TraceException("InitPythonEngine");
+                sMessage = $"Init Python Environment Error\r\n{ex.Message}";
+                return false;
+            }
+            finally
+            {
+                "InitPythonEngine.Complete".TraceRecord();
+            }
         }
 
         private void WorkModeBarEditItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)

@@ -15,6 +15,21 @@ namespace Deep_Learning_Demo
 {
     public static class csCommonExtension
     {
+        public static void TraceRecord(this string sMessage)
+        {
+            Trace.WriteLine($"{csDateTimeHelper.TimeOnly_fff} {sMessage}");
+        }
+
+        /// <summary>
+        /// Trace common exception
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="sMessage"></param>
+        public static void TraceException(this Exception ex, string sMessage)
+        {
+            string sOutput = $"{csDateTimeHelper.TimeOnly_fff} {sMessage}.Exception:{ex.GetMessageDetail()}";
+            Trace.WriteLine(sOutput);
+        }
 
         public static void ShowResponseInfo(this HttpResponseMessage response)
         {
