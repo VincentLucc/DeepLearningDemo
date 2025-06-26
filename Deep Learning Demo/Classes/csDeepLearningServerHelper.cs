@@ -60,8 +60,8 @@ namespace Deep_Learning_Demo.Classes
                 //Must set to image
                 content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/tiff");
                 //Debug info
-                content.Headers.Add("parameters", GetAPIRequestParameterString());
-                //content.Headers.Add("parameters", "GetAPIRequestParameterString()");
+                string sJson = GetAPIRequestParameterString();
+                content.Headers.Add("parameters", sJson);
 
                 //Send request
                 HttpResponseMessage response = await httpClient.PostAsync(sUrl, content);

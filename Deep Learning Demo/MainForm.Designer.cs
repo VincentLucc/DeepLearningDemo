@@ -35,6 +35,8 @@ namespace Deep_Learning_Demo
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.OpenImageBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.RequestBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
+            this.WorkModeBarEditItem = new DevExpress.XtraBars.BarEditItem();
+            this.workModeLookUpEdit = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.ResetViewBarButtonItem = new DevExpress.XtraBars.BarButtonItem();
             this.MainMenuBar = new DevExpress.XtraBars.Bar();
             this.bar3 = new DevExpress.XtraBars.Bar();
@@ -55,6 +57,7 @@ namespace Deep_Learning_Demo
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workModeLookUpEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
@@ -84,10 +87,13 @@ namespace Deep_Learning_Demo
             this.RequestBarButtonItem,
             this.ImageSizeBarButtonItem,
             this.ProcessTimeBarButtonItem,
-            this.ResetViewBarButtonItem});
+            this.ResetViewBarButtonItem,
+            this.WorkModeBarEditItem});
             this.barManager1.LargeImages = this.imageCollection32;
             this.barManager1.MainMenu = this.MainMenuBar;
-            this.barManager1.MaxItemId = 5;
+            this.barManager1.MaxItemId = 6;
+            this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.workModeLookUpEdit});
             this.barManager1.StatusBar = this.bar3;
             // 
             // bar1
@@ -98,7 +104,8 @@ namespace Deep_Learning_Demo
             this.bar1.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
             this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.OpenImageBarButtonItem),
-            new DevExpress.XtraBars.LinkPersistInfo(this.RequestBarButtonItem),
+            new DevExpress.XtraBars.LinkPersistInfo(this.RequestBarButtonItem, true),
+            new DevExpress.XtraBars.LinkPersistInfo(this.WorkModeBarEditItem),
             new DevExpress.XtraBars.LinkPersistInfo(this.ResetViewBarButtonItem, true)});
             this.bar1.OptionsBar.AllowQuickCustomization = false;
             this.bar1.OptionsBar.DrawBorder = false;
@@ -116,16 +123,32 @@ namespace Deep_Learning_Demo
             // 
             // RequestBarButtonItem
             // 
-            this.RequestBarButtonItem.Caption = "barButtonItem1";
+            this.RequestBarButtonItem.Caption = "Request Deep Result";
             this.RequestBarButtonItem.Id = 1;
             this.RequestBarButtonItem.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
             this.RequestBarButtonItem.ImageOptions.LargeImage = global::Deep_Learning_Demo.Properties.Resources.convert_32x32;
             this.RequestBarButtonItem.Name = "RequestBarButtonItem";
             this.RequestBarButtonItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.RequestBarButtonItem_ItemClick);
             // 
+            // WorkModeBarEditItem
+            // 
+            this.WorkModeBarEditItem.Caption = "barEditItem1";
+            this.WorkModeBarEditItem.Edit = this.workModeLookUpEdit;
+            this.WorkModeBarEditItem.Id = 5;
+            this.WorkModeBarEditItem.Name = "WorkModeBarEditItem";
+            this.WorkModeBarEditItem.Size = new System.Drawing.Size(100, 0);
+            this.WorkModeBarEditItem.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.WorkModeBarEditItem_ItemClick);
+            // 
+            // workModeLookUpEdit
+            // 
+            this.workModeLookUpEdit.AutoHeight = false;
+            this.workModeLookUpEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.workModeLookUpEdit.Name = "workModeLookUpEdit";
+            // 
             // ResetViewBarButtonItem
             // 
-            this.ResetViewBarButtonItem.Caption = "barButtonItem2";
+            this.ResetViewBarButtonItem.Caption = "Reset Zoom";
             this.ResetViewBarButtonItem.Id = 4;
             this.ResetViewBarButtonItem.ImageOptions.Image = global::Deep_Learning_Demo.Properties.Resources.zoom100percent_32x32;
             this.ResetViewBarButtonItem.ImageOptions.ImageIndex = 3;
@@ -310,6 +333,7 @@ namespace Deep_Learning_Demo
             this.Text = "Deep Learning API Client Demo";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.workModeLookUpEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
@@ -349,6 +373,8 @@ namespace Deep_Learning_Demo
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private System.Windows.Forms.Timer timer1;
         private DevExpress.XtraBars.BarButtonItem ResetViewBarButtonItem;
+        private DevExpress.XtraBars.BarEditItem WorkModeBarEditItem;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit workModeLookUpEdit;
     }
 }
 

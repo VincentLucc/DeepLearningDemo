@@ -53,6 +53,7 @@ namespace Deep_Learning_Demo
                 return;
             }
 
+            InitWorkModeLookupEdit();
             int iTimeout = csConfigHelper.config.APISettings.Timeout;
             csDeepLearningServerHelper.InitServices(iTimeout);
 
@@ -62,6 +63,24 @@ namespace Deep_Learning_Demo
             IsFormLoad = true;
         }
 
+        private void InitWorkModeLookupEdit()
+        {
+            var workModeOptions = Enum.GetValues(typeof(_workMode));
+            workModeLookUpEdit.DataSource = workModeOptions;
+            workModeLookUpEdit.DropDownRows = workModeOptions.Length;
+            workModeLookUpEdit.ShowFooter = false;
+            workModeLookUpEdit.EditValueChanged += WorkModeLookUpEdit_EditValueChanged;
+            WorkModeBarEditItem.EditValue = csConfigHelper.config.WorkMode;
+        }
+
+        private void WorkModeLookUpEdit_EditValueChanged(object sender, EventArgs e)
+        {
+            if (!IsFormLoad) return;
+            if (WorkModeBarEditItem.EditValue is _workMode workMode)
+            {
+                csConfigHelper.config.WorkMode = workMode;
+            }
+        }
 
         private void InitLogging()
         {
@@ -182,6 +201,11 @@ namespace Deep_Learning_Demo
                 MessageHelper.CloseLoadingForm();
                 this.Enabled = true;
             }
+
+        }
+
+        private void WorkModeBarEditItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
 
         }
     }
