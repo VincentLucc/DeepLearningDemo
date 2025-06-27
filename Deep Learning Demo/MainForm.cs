@@ -82,6 +82,12 @@ namespace Deep_Learning_Demo
             {
                 csConfigHelper.config.WorkMode = workMode;
                 $"WorkModeChanged:{csConfigHelper.config.WorkMode}".TraceRecord();
+
+                if (!csConfigHelper.SaveToDefault(out string sMessage))
+                {
+                    MessageHelper.Info(sMessage);
+                }
+               
             }
         }
 
