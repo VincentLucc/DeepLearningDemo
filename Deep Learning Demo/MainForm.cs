@@ -254,8 +254,9 @@ namespace Deep_Learning_Demo
             {
                 try
                 {
+                    //Verify environment
                     dynamic sys = Py.Import("sys");
-                    $"Python version: {sys.version}".TraceRecord();
+                    $"Python Environment: [Version:{sys.version}],[SysPath:{sys.path}] ".TraceRecord();
 
                     //Apply module folders
                     foreach (var folder in csConfigHelper.config.PythonModuleFolders)
@@ -323,9 +324,10 @@ namespace Deep_Learning_Demo
                 //Must set dll
                 Runtime.PythonDLL = $"{sPythonHome}\\python312.dll";
                 PythonEngine.PythonHome = sPythonHome;
-                //python path (Any call like [PythonEngine.PythonHome] must run after [Initialize])
+                //python path (Any get method like [PythonEngine.PythonHome] must run after [Initialize])
                 StringBuilder pathBuilder = new StringBuilder();
                 pathBuilder.Append($"{sPythonHome}\\Lib");
+                pathBuilder.Append($";{sPythonHome}\\DLLs");//Must have, etc: _ctypes.pyd
                 pathBuilder.Append($";{sPythonHome}\\Lib\\site-packages");
                 PythonEngine.PythonPath = pathBuilder.ToString();
 

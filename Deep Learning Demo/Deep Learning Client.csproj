@@ -33,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.BonusSkins.v22.1, Version=22.1.13.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
@@ -212,7 +213,7 @@
     <Compile Include="Classes\csDateTimeHelper.cs" />
     <Compile Include="Classes\csDebugListener.cs" />
     <Compile Include="Classes\csDeepLearningServerHelper.cs" />
-    <Compile Include="Classes\csDeepLearningSettings.cs" />
+    <Compile Include="Classes\csDeepLearningAPISettings.cs" />
     <Compile Include="Classes\csDevMessage.cs" />
     <Compile Include="Classes\csEnumHelper.cs" />
     <Compile Include="Classes\csHalconExtension.cs" />
