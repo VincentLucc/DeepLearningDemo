@@ -371,7 +371,6 @@ namespace Deep_Learning_Demo
                 }
 
 
-
                 if (!File.Exists(sFileName))
                 {
                     sMessage = $"Image file doesn't exist.\r\n{sFileName}";

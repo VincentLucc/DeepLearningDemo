@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using DevExpress.XtraEditors;
 using Newtonsoft.Json;
+using Python.Runtime;
 
 namespace Deep_Learning_Demo
 {
@@ -42,6 +43,22 @@ namespace Deep_Learning_Demo
 
 
             return list;
+        }
+
+
+        public static PyObject ByteArrayToPythnObject(this byte[] arrayData)
+        {
+            "ByteArrayToPythnObject.Enter".TraceRecord();
+            using (Py.GIL())
+            {
+                dynamic sys = Py.Import("sys");
+                $"Python version: {sys.version}".TraceRecord();
+                PyObject builtins = Py.Import("builtins");
+
+                var bytesHandler = builtins.GetAttr("bytes");
+                PyObject pyBytes = bytesHandler.Invoke(arrayData.ToPython());
+                return pyBytes;
+            }
         }
 
         /// <summary>
@@ -697,9 +714,9 @@ namespace Deep_Learning_Demo
             return ht_Value;
         }
 
- 
 
-      
+
+
     }
 
 

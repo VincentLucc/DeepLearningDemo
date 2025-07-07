@@ -87,7 +87,7 @@ namespace Deep_Learning_Demo
                 {
                     MessageHelper.Info(sMessage);
                 }
-               
+
             }
         }
 
@@ -250,6 +250,11 @@ namespace Deep_Learning_Demo
             HOperatorSet.GetImageSize(image, out HTuple width, out HTuple height);
             "ProcessLocalPythonScript.RawBytesReady".TraceRecord();
 
+            //Var data
+            "ProcessLocalPythonScript.ToPythonObject.Start".TraceRecord();
+            var pythonObject = rawImage.ByteArrayToPythnObject();
+            "ProcessLocalPythonScript.ToPythonObject.Complete".TraceRecord();
+
             using (Py.GIL())
             {
                 try
@@ -271,7 +276,7 @@ namespace Deep_Learning_Demo
                     dynamic myRunner = runnerModule.ModelRunner();
 
                     //Perform inference
-                    dynamic inferResult = myRunner.infer_image(rawImage);
+                    dynamic inferResult = myRunner.infer_image(pythonObject);
 
                     //Check result
                     byte[] resultBytes = null;
@@ -280,7 +285,8 @@ namespace Deep_Learning_Demo
                         resultBytes = (byte[])inferResult;
                     }
                     else if (inferResult is PyObject pyObj)
-                    {
+                    {//Very slow
+                        var pythonType = pyObj.GetPythonType();
                         resultBytes = (byte[])pyObj.AsManagedObject(typeof(byte[]));
                     }
                     else
@@ -333,6 +339,8 @@ namespace Deep_Learning_Demo
 
                 //Start init
                 PythonEngine.Initialize();
+                //Allow none-main thread to run python
+                PythonEngine.BeginAllowThreads();
 
                 //Complete
                 csConfigHelper.IsPythonEngineInit = true;
