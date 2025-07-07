@@ -13,26 +13,27 @@ namespace Deep_Learning_Demo.Classes
     {
         public _workMode WorkMode { get; set; } = _workMode.API;
 
-        public string PythonHome { get; set; } = "C:\\Program Files\\Python312";
-
-        public List<string> PythonModuleFolders { get; set; } = new List<string>();
+        /// <summary>
+        /// API Mode
+        /// </summary>
         public string ServerUrl { get; set; } = "http://10.1.2.202:8000";
 
+        /// <summary>
+        /// Local script
+        /// </summary>
+        public string PythonHome { get; set; } = "C:\\Program Files\\Python312";
+
+        /// <summary>
+        /// Local script
+        /// </summary>
+        public string ScriptFile { get; set; } = @"E:\Backup\Companies\PackSmart\Projects\DeepLearning\DeepLearning.Client.Git\Deep Learning Demo\PythonScripts\model_runner_parallel.py";
+
+  
         public csDeepLearningAPISettings APISettings { get; set; } = new csDeepLearningAPISettings();
 
         public csConfigModel()
         {
 
-        }
-
-
-        public void CreateSampleData()
-        {
-            APISettings.InitData();
-
-            //Create Sample module paths
-            PythonModuleFolders.Add(@"C:\PythonModules\Module1");
-            PythonModuleFolders.Add(@"C:\PythonModules\Module2");
         }
 
     }

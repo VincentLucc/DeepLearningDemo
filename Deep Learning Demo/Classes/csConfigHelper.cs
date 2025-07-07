@@ -17,7 +17,7 @@ public class csConfigHelper
 
     public static string ConfigPath = Application.StartupPath + @"\Config\config.xml";
 
-    public static bool IsPythonEngineInit = false;
+
     public static bool LoadFromDefault(out string sMessage)
     {
         sMessage = "";
@@ -121,7 +121,6 @@ public class csConfigHelper
         else
         {//File not exist, create a new and save
             config = new csConfigModel();
-            config.CreateSampleData();
             return SaveToDefault(out sMessage);
         }
     }

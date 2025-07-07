@@ -12,8 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Python.Runtime;
-
+ 
 namespace Deep_Learning_Demo
 {
     public partial class MainForm : XtraForm
@@ -70,7 +69,7 @@ namespace Deep_Learning_Demo
             {
                 csAnomalyScriptHelper.StartPythonProcesses(i);
             }
- 
+
             //Complete
             timer1.Start();
             IsFormLoad = true;
@@ -243,131 +242,40 @@ namespace Deep_Learning_Demo
 
         private void ProcessLocalPythonScript(HObject image)
         {
-            //Ignore the init time
-            string sMessage = String.Empty;
-            if (!csConfigHelper.IsPythonEngineInit)
-            {//Make sure only init once
-                if (!InitPythonEngine(out sMessage))
-                {
-                    MessageHelper.Error(sMessage);
-                    return;
-                }
-            }
-
-            //Start the operation
-            "ProcessLocalPythonScript.Enter".TraceRecord();
-            Stopwatch watch = Stopwatch.StartNew();
-            var rawImage = image.HobjectToRawByte();
-            HOperatorSet.GetImageSize(image, out HTuple width, out HTuple height);
-            "ProcessLocalPythonScript.RawBytesReady".TraceRecord();
-
-            //Var data
-            "ProcessLocalPythonScript.ToPythonObject.Start".TraceRecord();
-            var pythonObject = rawImage.ByteArrayToPythnObject();
-            "ProcessLocalPythonScript.ToPythonObject.Complete".TraceRecord();
-
-            using (Py.GIL())
-            {
-                try
-                {
-                    //Verify environment
-                    dynamic sys = Py.Import("sys");
-                    $"Python Environment: [Version:{sys.version}],[SysPath:{sys.path}] ".TraceRecord();
-
-                    //Apply module folders
-                    foreach (var folder in csConfigHelper.config.PythonModuleFolders)
-                    {
-                        sys.path.append(folder);
-                        $"Python module folder: {folder}".TraceRecord();
-                    }
-
-                    //Get module entry
-                    dynamic runnerModule = Py.Import("model_runner");
-                    //Create instance
-                    dynamic myRunner = runnerModule.ModelRunner();
-
-                    //Perform inference
-                    dynamic inferResult = myRunner.infer_image(pythonObject);
-
-                    //Check result
-                    byte[] resultBytes = null;
-                    if (inferResult is byte[])
-                    {
-                        resultBytes = (byte[])inferResult;
-                    }
-                    else if (inferResult is PyObject pyObj)
-                    {//Very slow
-                        var pythonType = pyObj.GetPythonType();
-                        resultBytes = (byte[])pyObj.AsManagedObject(typeof(byte[]));
-                    }
-                    else
-                    {
-                        MessageHelper.Error("Unexpected result");
-                        return;
-                    }
-
-                    //Assuming the result is an image, convert it back to HObject
-                    var responseImage = resultBytes.MonoBytesToHObject((int)width.D, (int)height.D);
-                    watch.Stop();
-                    ProcessTimeBarButtonItem.Caption = $"Last Request: {watch.ElapsedMilliseconds.ToString("f1")}ms";
-
-                    //Show the result
-                    HalconWindow.DisplayImage(responseImage);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine($"ProcessLocalPythonScript.Exception:{ex.GetMessageDetail()}");
-                    MessageHelper.Error(ex.Message);
-                }
-                finally
-                {
-                    //Don't call this, leave engine running!!!
-                    //PythonEngine.Shutdown();
-                    "ProcessLocalPythonScript.Complete".TraceRecord();
-                }
-            }
-        }
-
-        private bool InitPythonEngine(out string sMessage)
-        {
-            sMessage = String.Empty;
-            csConfigHelper.IsPythonEngineInit = false;
+            var watch = Stopwatch.StartNew();
 
             try
             {
-                "InitPythonEngine.Start".TraceRecord();
-                //Prepare
-                string sPythonHome = csConfigHelper.config.PythonHome;
-                //Must set dll
-                Runtime.PythonDLL = $"{sPythonHome}\\python312.dll";
-                PythonEngine.PythonHome = sPythonHome;
-                //python path (Any get method like [PythonEngine.PythonHome] must run after [Initialize])
-                StringBuilder pathBuilder = new StringBuilder();
-                pathBuilder.Append($"{sPythonHome}\\Lib");
-                pathBuilder.Append($";{sPythonHome}\\DLLs");//Must have, etc: _ctypes.pyd
-                pathBuilder.Append($";{sPythonHome}\\Lib\\site-packages");
-                PythonEngine.PythonPath = pathBuilder.ToString();
+   
+                var requestAction = csAnomalyScriptHelper.Request(image, 0, 5000);
 
-                //Start init
-                PythonEngine.Initialize();
-                //Allow none-main thread to run python
-                PythonEngine.BeginAllowThreads();
+                if (requestAction.ResponseImage == null)
+                {
+                    MessageHelper.Error(requestAction.Message);
+                    return;
+                }
 
-                //Complete
-                csConfigHelper.IsPythonEngineInit = true;
-                return true;
+
+                ProcessTimeBarButtonItem.Caption = $"Last Request: {watch.ElapsedMilliseconds.ToString("f1")}ms";
+
+                //Show the result
+                HalconWindow.DisplayImage(requestAction.ResponseImage);
+
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ex.TraceException("InitPythonEngine");
-                sMessage = $"Init Python Environment Error\r\n{ex.Message}";
-                return false;
+
+                Trace.WriteLine($"ProcessLocalPythonScript.Exception:{e.GetMessageDetail()}");
+                MessageHelper.Error(e.Message);
             }
             finally
             {
-                "InitPythonEngine.Complete".TraceRecord();
+                "ProcessLocalPythonScript.Complete".TraceRecord();
             }
+
         }
+
+ 
 
         private void WorkModeBarEditItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {

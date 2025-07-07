@@ -18,19 +18,16 @@ namespace Deep_Learning_Demo
 
         private const long DefaultSize = 100 * 1024 * 1024;
 
-        public const string pythonHome = @"C:\Program Files\Python312";
-
-        public const string scriptPath =
-            @"E:\Backup\Companies\PackSmart\Projects\DeepLearning\DeepLearning.Client.Git\Deep Learning Demo\PythonScripts\model_runner_parallel.py";
-
         public static List<Process> ScriptProcess = new List<Process>();
 
         public static void StartPythonProcesses(int iProfileIndex)
         {
-            string sPythonExe = $"{pythonHome}\\python.exe";
+            string sPythonHome = csConfigHelper.config.PythonHome;
+            string sPythonExe = $"{sPythonHome}\\python.exe";
             string sRequest = GetSystemName(iProfileIndex, _comDirection.Request);
             string sResponse = GetSystemName(iProfileIndex, _comDirection.Respoonse);
-            string sArgument = $"\"{scriptPath}\" {sRequest} {sResponse} {iProfileIndex}";
+            string sScriptPath= csConfigHelper.config.ScriptFile;
+            string sArgument = $"\"{sScriptPath}\" {sRequest} {sResponse} {iProfileIndex}";
 
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo()
