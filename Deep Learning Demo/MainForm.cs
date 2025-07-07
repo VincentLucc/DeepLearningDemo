@@ -34,6 +34,12 @@ namespace Deep_Learning_Demo
         private void InitEvents()
         {
             this.Shown += MainForm_Shown;
+            this.FormClosed += MainForm_FormClosed;
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            csAnomalyScriptHelper.CloseAllProcesses();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -59,7 +65,12 @@ namespace Deep_Learning_Demo
             int iTimeout = csConfigHelper.config.APISettings.Timeout;
             csDeepLearningServerHelper.InitServices(iTimeout);
 
-
+            //Init local script service
+            for (int i = 0; i < 2; i++)
+            {
+                csAnomalyScriptHelper.StartPythonProcesses(i);
+            }
+ 
             //Complete
             timer1.Start();
             IsFormLoad = true;

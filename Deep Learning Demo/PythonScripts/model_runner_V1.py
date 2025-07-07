@@ -3,6 +3,7 @@ from PIL import Image
 from io import BytesIO
 import torchvision.transforms as transforms
 import torch
+import base64
 
 from anomalib.deploy import TorchInferencer
 from anomalib.data.utils.tiler import Tiler
@@ -22,7 +23,7 @@ class ModelRunner:
             "model_path": r"C:\Users\klin\OneDrive - Pack-Smart Inc\Desktop\Windows_Training\training_test\results\Patchcore\custom\v17\weights\torch\model.pt",
             "patch_size": 512,
             "overlap_size": 64,
-            "number_of_chunks": 8, #4
+            "number_of_chunks": 4,
         },
         1: {
             "description": "PatchCore_672",
@@ -30,7 +31,7 @@ class ModelRunner:
             "model_path": r"C:\Users\klin\OneDrive - Pack-Smart Inc\Desktop\Windows_Training\training_test\results\Patchcore\custom\v21\weights\torch\model.pt",
             "patch_size": 672,
             "overlap_size": 64,
-            "number_of_chunks": 4, #2
+            "number_of_chunks": 2,
         }
         # Add more profiles here
     }
@@ -63,13 +64,12 @@ class ModelRunner:
         for i, chunk in enumerate(chunks):
             self.model.predict(image=chunk)
 
-    def infer_image(self, input_data, width=1440, height=3200, mode='L', return_type='bytes'): # raw_bytes: bytes
+    def infer_image(self, input_data, return_type='bytes'): # raw_bytes: bytes
         start = time.time()
         
         if isinstance(input_data, bytes):
             """Infer directly from raw image bytes (fast, no disk I/O)."""
-            # image = Image.open(BytesIO(input_data)).convert("RGB")
-            image = Image.frombytes(mode=mode, size=(width, height), data=input_data).convert("RGB")
+            image = Image.open(BytesIO(input_data)).convert("RGB")
         elif isinstance(input_data, Image.Image):
             image = input_data
         else:
@@ -84,17 +84,21 @@ class ModelRunner:
 
             chunks_anomaly_results.append(predictions.anomaly_map.cpu())
 
-        # RGB to Gray
         final_outputs = torch.cat(chunks_anomaly_results, dim=0).unsqueeze(1)
         final_entire = self.tiler.untile(final_outputs)
 
         if return_type == 'bytes':
-            return_bytes = (final_entire.squeeze() * 255).to(torch.uint8).numpy().tobytes()
+            pil_result = to_pil_image(final_entire)
+            gray_result = pil_result.convert("L")
+
+            buf = BytesIO()
+            gray_result.save(buf, format="PNG")
+            buf.seek(0)
 
             end = time.time()
             print("   + inner cal: " + str(end-start))
 
-            return bytearray(return_bytes)
+            return buf.getvalue()
         
         elif return_type == 'tensor':
             gray_tensor = final_entire[:, 0:1, :, :]
