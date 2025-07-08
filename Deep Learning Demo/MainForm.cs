@@ -38,7 +38,7 @@ namespace Deep_Learning_Demo
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            csAnomalyScriptHelper.CloseAllProcesses();
+          
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -61,15 +61,23 @@ namespace Deep_Learning_Demo
             }
 
             InitWorkModeLookupEdit();
+            FakeResponseBarToggleSwitchItem.Checked = csConfigHelper.config.FakeResponse;
             int iTimeout = csConfigHelper.config.APISettings.Timeout;
             csDeepLearningServerHelper.InitServices(iTimeout);
+            //Make sure all process killed even crashed
+            Task.Run(csAnomalyScriptHelper.ProcessKill);
 
             //Init local script service
             for (int i = 0; i < 2; i++)
             {
                 csAnomalyScriptHelper.StartPythonProcesses(i);
+                //Start the fake response
+                int iLocal = i; //Avoid threading wrong value
+                Task.Run(() => csAnomalyScriptHelper.ProcessFakeResponse(iLocal));
             }
 
+
+             
             //Complete
             timer1.Start();
             IsFormLoad = true;
@@ -280,6 +288,13 @@ namespace Deep_Learning_Demo
         private void WorkModeBarEditItem_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
 
+        }
+
+        private void FakeResponseBarToggleSwitchItem_CheckedChanged(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            if (!IsFormLoad)return;
+
+          csConfigHelper.config.FakeResponse=  FakeResponseBarToggleSwitchItem.Checked;
         }
     }
 }

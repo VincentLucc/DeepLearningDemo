@@ -56,6 +56,7 @@ namespace Deep_Learning_Demo
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.FakeResponseBarToggleSwitchItem = new DevExpress.XtraBars.BarToggleSwitchItem();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.workModeLookUpEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageCollection32)).BeginInit();
@@ -88,10 +89,11 @@ namespace Deep_Learning_Demo
             this.ImageSizeBarButtonItem,
             this.ProcessTimeBarButtonItem,
             this.ResetViewBarButtonItem,
-            this.WorkModeBarEditItem});
+            this.WorkModeBarEditItem,
+            this.FakeResponseBarToggleSwitchItem});
             this.barManager1.LargeImages = this.imageCollection32;
             this.barManager1.MainMenu = this.MainMenuBar;
-            this.barManager1.MaxItemId = 6;
+            this.barManager1.MaxItemId = 7;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.workModeLookUpEdit});
             this.barManager1.StatusBar = this.bar3;
@@ -106,6 +108,7 @@ namespace Deep_Learning_Demo
             new DevExpress.XtraBars.LinkPersistInfo(this.OpenImageBarButtonItem),
             new DevExpress.XtraBars.LinkPersistInfo(this.RequestBarButtonItem, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.WorkModeBarEditItem),
+            new DevExpress.XtraBars.LinkPersistInfo(this.FakeResponseBarToggleSwitchItem),
             new DevExpress.XtraBars.LinkPersistInfo(this.ResetViewBarButtonItem, true)});
             this.bar1.OptionsBar.AllowQuickCustomization = false;
             this.bar1.OptionsBar.DrawBorder = false;
@@ -319,6 +322,13 @@ namespace Deep_Learning_Demo
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // FakeResponseBarToggleSwitchItem
+            // 
+            this.FakeResponseBarToggleSwitchItem.Caption = "Fake Response";
+            this.FakeResponseBarToggleSwitchItem.Id = 6;
+            this.FakeResponseBarToggleSwitchItem.Name = "FakeResponseBarToggleSwitchItem";
+            this.FakeResponseBarToggleSwitchItem.CheckedChanged += new DevExpress.XtraBars.ItemClickEventHandler(this.FakeResponseBarToggleSwitchItem_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,6 +385,7 @@ namespace Deep_Learning_Demo
         private DevExpress.XtraBars.BarButtonItem ResetViewBarButtonItem;
         private DevExpress.XtraBars.BarEditItem WorkModeBarEditItem;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit workModeLookUpEdit;
+        private DevExpress.XtraBars.BarToggleSwitchItem FakeResponseBarToggleSwitchItem;
     }
 }
 

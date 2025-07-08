@@ -28,7 +28,9 @@ namespace Deep_Learning_Demo.Classes
         /// </summary>
         public string ScriptFile { get; set; } = @"E:\Backup\Companies\PackSmart\Projects\DeepLearning\DeepLearning.Client.Git\Deep Learning Demo\PythonScripts\model_runner_parallel.py";
 
-  
+
+        public bool FakeResponse { get; set; }
+
         public csDeepLearningAPISettings APISettings { get; set; } = new csDeepLearningAPISettings();
 
         public csConfigModel()
