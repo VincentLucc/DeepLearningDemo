@@ -77,7 +77,7 @@ namespace Deep_Learning_Demo
                 try
                 {
                     //Close the response thread
-                    content.QuitFakeResponse = false;//Flag to close the response task
+                    content.QuitFakeResponse = true;//Flag to close the response task
                     string sRequestEvent = GetSystemName(content.ModelIndex, _comItem.RequestEvent);
                     var requestDataReady = new EventWaitHandle(initialState: false, EventResetMode.AutoReset, sRequestEvent);
                     requestDataReady.Set();//Remove the event blocking
