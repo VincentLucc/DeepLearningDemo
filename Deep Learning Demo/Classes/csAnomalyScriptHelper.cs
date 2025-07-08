@@ -76,6 +76,13 @@ namespace Deep_Learning_Demo
             {
                 try
                 {
+                    //Close the response thread
+                    content.QuitFakeResponse = false;//Flag to close the response task
+                    string sRequestEvent = GetSystemName(content.ModelIndex, _comItem.RequestEvent);
+                    var requestDataReady = new EventWaitHandle(initialState: false, EventResetMode.AutoReset, sRequestEvent);
+                    requestDataReady.Set();//Remove the event blocking
+
+                    //Close the python task
                     if (!content.ScriptProcess.HasExited)
                     {
                         content.ScriptProcess.Kill();      // Force close
@@ -218,13 +225,6 @@ namespace Deep_Learning_Demo
                         continue;
                     }
 
-                    //Check fake flag
-                    if (!csConfigHelper.config.FakeResponse)
-                    {
-                        Thread.Sleep(20);
-                        continue;
-                    }
-
                     //Check content ready
                     var currentContent = ScriptContents.FirstOrDefault(a => a.ModelIndex == iIndex);
                     if (currentContent == null)
@@ -232,6 +232,19 @@ namespace Deep_Learning_Demo
                         Thread.Sleep(20);
                         continue;
                     }
+
+                    //Check quit signal
+                    if (currentContent.QuitFakeResponse) break;
+      
+
+                    //Check fake flag
+                    if (!csConfigHelper.config.FakeResponse)
+                    {
+                        Thread.Sleep(20);
+                        continue;
+                    }
+
+
 
                     //Request is ready
                     $"ScriptHelper.FakeResponse({iIndex}).StartRead".TraceRecord();
@@ -325,6 +338,10 @@ namespace Deep_Learning_Demo
             public Process ScriptProcess;
             public MemoryMappedFile RequestFile;
             public MemoryMappedFile ResponseFile;
+            /// <summary>
+            /// Used to close the response task
+            /// </summary>
+            public bool QuitFakeResponse;
         }
     }
 
